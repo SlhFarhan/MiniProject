@@ -3,6 +3,7 @@ package com.farhansolih0009.miniproject.ui.screen
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -94,13 +96,14 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     )
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color(0xFF0D47A1),
+                    titleContentColor = Color.White,
                 ),
                 actions = {
                     IconButton(onClick = {
                         if (nama.isEmpty() || nim.isEmpty() || kelas.isEmpty()) {
-                            Toast.makeText(context, "Data tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+                            val errorMessage = context.getString(R.string.error_empty_data)
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                             return@IconButton
                         }
 
@@ -184,13 +187,13 @@ fun FormMahasiswa(
     val kelasList = listOf("D3IF-47-01", "D3IF-47-02", "D3IF-47-03", "D3IF-47-04")
 
     Column(
-        modifier = modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier.fillMaxSize().background(Color.White).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedTextField(
             value = nama,
             onValueChange = onNamaChange,
-            label = { Text("Nama") },
+            label = { Text(stringResource(id = R.string.nama)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
@@ -202,7 +205,7 @@ fun FormMahasiswa(
         OutlinedTextField(
             value = nim,
             onValueChange = onNimChange,
-            label = { Text("NIM") },
+            label = { Text(stringResource(id = R.string.nim)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
@@ -211,7 +214,7 @@ fun FormMahasiswa(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Text("Pilih Kelas:", style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(id = R.string.class_selection_label), style = MaterialTheme.typography.bodyMedium)
 
         OutlinedCard(
             modifier = Modifier.fillMaxWidth(),

@@ -6,8 +6,6 @@ import com.farhansolih0009.miniproject.database.MahasiswaDao
 import com.farhansolih0009.miniproject.model.Mahasiswa
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class DetailViewModel(private val dao: MahasiswaDao) : ViewModel() {
 

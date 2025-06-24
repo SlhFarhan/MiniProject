@@ -4,12 +4,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.farhansolih0009.miniproject.R
 
 @Composable
 fun ProfilDialog(
@@ -19,25 +23,25 @@ fun ProfilDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(text = "Profil Pengguna") },
+        title = { Text(text = stringResource(id = R.string.profile_title)) },
         text = {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Anda login sebagai:")
+                Text(stringResource(id = R.string.profile_greeting))
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = username, style = MaterialTheme.typography.bodyLarge)
             }
         },
         confirmButton = {
             TextButton(onClick = onLogout) {
-                Text("Logout")
+                Text(stringResource(id = R.string.logout_button))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text("Tutup")
+                Text(stringResource(id = R.string.close_button))
             }
         }
     )

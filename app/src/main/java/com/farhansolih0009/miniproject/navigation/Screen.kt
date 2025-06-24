@@ -11,4 +11,8 @@ sealed class Screen(val route: String) {
     data object FormUbah : Screen("detailScreen/{$KEY_ID_MAHASISWA}") {
         fun withId(id: Long) = "detailScreen/$id"
     }
+    data object Dashboard : Screen("dashboardScreen")
+    data object About : Screen("aboutScreen")
+    data object LoginSuccessSplash : Screen("loginSuccessSplashScreen")
+    data object ManageData : Screen("manageDataScreen") // Rute baru
 }
