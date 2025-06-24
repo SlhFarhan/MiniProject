@@ -1,4 +1,5 @@
 package com.farhansolih0009.miniproject.ui.screen
+
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,6 +33,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -50,17 +56,18 @@ import com.farhansolih0009.miniproject.navigation.Screen
 import com.farhansolih0009.miniproject.ui.theme.MiniProjectTheme
 import com.farhansolih0009.miniproject.util.SettingsDataStore
 import com.farhansolih0009.miniproject.util.ViewModelFactory
-
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
-    val dataStore = SettingsDataStore(LocalContext.current)
+    val context = LocalContext.current
+    val dataStore = SettingsDataStore(context)
     val showList by dataStore.layoutFlow.collectAsState(true)
+    val loggedInUser by dataStore.loggedInUserFlow.collectAsState(initial = "")
+    val scope = rememberCoroutineScope()
+    var showProfilDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -74,7 +81,7 @@ fun MainScreen(navController: NavHostController) {
                 ),
                 actions = {
                     IconButton(onClick = {
-                        CoroutineScope(Dispatchers.IO).launch {
+                        scope.launch {
                             dataStore.saveLayout(!showList)
                         }
                     }) {
@@ -87,6 +94,13 @@ fun MainScreen(navController: NavHostController) {
                                 if (showList) R.string.grid
                                 else R.string.list
                             ),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    IconButton(onClick = { showProfilDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = "Profil",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -109,13 +123,29 @@ fun MainScreen(navController: NavHostController) {
     ) { innerPadding ->
         ScreenContent(showList, Modifier.padding(innerPadding), navController)
     }
+
+    if (showProfilDialog) {
+        ProfilDialog(
+            username = loggedInUser ?: "",
+            onDismissRequest = { showProfilDialog = false },
+            onLogout = {
+                showProfilDialog = false
+                scope.launch {
+                    dataStore.clearLoginStatus()
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
+                    }
+                }
+            }
+        )
+    }
 }
 
 @Composable
 fun ScreenContent( showList: Boolean, modifier: Modifier = Modifier, navController: NavHostController) {
     val context = LocalContext.current
     val db = MahasiswaDb.getInstance(context)
-    val factory = ViewModelFactory(db.dao)
+    val factory = ViewModelFactory(db.dao, db.userDao)
     val viewModel: MainViewModel = viewModel(factory = factory)
     val data by viewModel.data.collectAsState()
 
@@ -164,7 +194,8 @@ fun ScreenContent( showList: Boolean, modifier: Modifier = Modifier, navControll
 @Composable
 fun ListItem(mahasiswa: Mahasiswa, onClick: () -> Unit) {
     Column (
-        modifier = Modifier.fillMaxWidth().padding(16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
             .clickable { onClick() }
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -187,7 +218,9 @@ fun ListItem(mahasiswa: Mahasiswa, onClick: () -> Unit) {
 @Composable
 fun GridItem(mahasiswa: Mahasiswa, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().clickable { onClick() },
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),

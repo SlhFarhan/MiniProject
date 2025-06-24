@@ -9,7 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.farhansolih0009.miniproject.ui.screen.DetailScreen
 import com.farhansolih0009.miniproject.ui.screen.KEY_ID_MAHASISWA
+import com.farhansolih0009.miniproject.ui.screen.LoginScreen
 import com.farhansolih0009.miniproject.ui.screen.MainScreen
+import com.farhansolih0009.miniproject.ui.screen.RegisterScreen
 // Import SplashScreen
 import com.farhansolih0009.miniproject.ui.screen.SplashScreen
 
@@ -24,6 +26,13 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         // Tambahkan composable untuk SplashScreen
         composable(route = Screen.Splash.route) {
             SplashScreen(navController)
+        }
+        // Tambahkan route baru
+        composable(route = Screen.Login.route) {
+            LoginScreen(navController)
+        }
+        composable(route = Screen.Register.route) {
+            RegisterScreen(navController)
         }
 
         composable(route = Screen.Home.route) {

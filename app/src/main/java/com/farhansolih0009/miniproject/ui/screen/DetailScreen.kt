@@ -59,7 +59,7 @@ const val KEY_ID_MAHASISWA = "idMahasiswa"
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
     val context = LocalContext.current
     val db = MahasiswaDb.getInstance(context)
-    val factory = ViewModelFactory(db.dao)
+    val factory = ViewModelFactory(db.dao, db.userDao)
     val viewModel: DetailViewModel = viewModel(factory = factory)
 
     var nama by remember { mutableStateOf("") }
