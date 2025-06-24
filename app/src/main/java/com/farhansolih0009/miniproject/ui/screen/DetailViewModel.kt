@@ -11,7 +11,6 @@ import java.util.Locale
 
 class DetailViewModel(private val dao: MahasiswaDao) : ViewModel() {
 
-    private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
 
     fun insert(nama: String, nim: String, kelas: String) {
         val mahasiswa = Mahasiswa(
