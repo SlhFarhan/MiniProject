@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Kampusku</string>
+    <string name="list_kosong">Belum ada data</string>
+    <string name="tambah_mahasiswa">Tambah Data Mahasiswa</string>
+    <string name="nama">Nama</string>
+    <string name="nim">NIM</string>
+    <string name="kembali">Kembali</string>
+    <string name="simpan">Simpan</string>
+    <string name="edit_mahasiswa">Ubah Mahasiswa</string>
+    <string name="lainnya">Opsi lainnya</string>
+    <string name="hapus">Hapus catatan</string>
+    <string name="pesan_hapus">Hapus mahasiswa ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
+    <string name="list">Tampilkan list</string>
+    <string name="grid">Tampilkan grid</string>
+</resources>
